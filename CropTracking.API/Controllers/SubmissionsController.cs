@@ -7,15 +7,15 @@ namespace CropTracking.API.Controllers
     public class SubmissionsController : Controller
     {
         [HttpGet()]
-        public IActionResult GetCities()
+        public IActionResult GetDailyInfo()
         {
-            return Ok(CitiesDataStore.Current.Submissions);
+            return Ok(CropDataStore.Current.Submissions);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCity(int id)
+        public IActionResult GetDailyInfo(int id)
         {
-            var city = CitiesDataStore.Current.Submissions.FirstOrDefault(c => c.Id == id);
+            var city = CropDataStore.Current.Submissions.FirstOrDefault(c => c.DailyInformationId == id);
             if (city == null)
             {
                 return NotFound();

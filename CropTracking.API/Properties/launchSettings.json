@@ -17,8 +17,6 @@
     },
     "CropTracking.API": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "api/submissions",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
