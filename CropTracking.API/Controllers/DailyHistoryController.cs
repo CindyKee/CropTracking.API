@@ -1,9 +1,54 @@
 ﻿namespace CropTracking.API.Controllers
-{
-    public class DailyHistoryController
+{ 
+
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using CropTracking.API.Helpers;
+
+
+    [Route("api/[controller]")]
+    public class DailyHistoryController : Controller
     {
-        // TODO 4: Add a simple GetHistory method that mimics the GetDailyInfo method in the DailyInfoController.
-        //  Make sure you are retrieving the data from the DailyHistory property of the CropDataStore.
-        //  Test that is returns all of the recors.
-    }
+
+        [HttpGet()]
+        public IActionResult GetHistory()
+        {
+            return Ok(CropDataStore.Current.DailyHistory);
+        }
+
+
+        [HttpGet("{packShipDate:datetime?}")]
+        public IActionResult GetDailyHistory(DateTime? packShipDate, [FromQuery]string companyName)
+        {
+            if (packShipDate.HasValue == false)
+            {
+
+                packShipDate = Helpers.DateHelpers.GetYesterday(DateTime.Today);
+            }
+
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                return NotFound();
+            }
+
+            var dailyHistory = CropDataStore.Current.DailyHistory
+                .FirstOrDefault(d => d.CompanyName == companyName && d.PackShipDate == packShipDate);
+
+
+            if (dailyHistory == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(dailyHistory);
+        }
+
+
+    };
+
+
+
+
+    
 }

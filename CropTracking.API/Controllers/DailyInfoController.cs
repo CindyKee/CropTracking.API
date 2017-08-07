@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
- 
+using CropTracking.API.Helpers;
+
+
 namespace CropTracking.API.Controllers
 {
     [Route("api/[controller]")]
@@ -24,8 +26,8 @@ namespace CropTracking.API.Controllers
         {
             if (packShipDate.HasValue == false)
             {
-                // TODO 1: Remove the CropTracking.API. that is gray here and add a using statement at the top.
-                packShipDate = CropTracking.API.Helpers.DateHelpers.GetYesterday(DateTime.Today);
+                
+                packShipDate = Helpers.DateHelpers.GetYesterday(DateTime.Today);
             }
 
             if (string.IsNullOrWhiteSpace(companyName))

@@ -11,7 +11,9 @@ namespace CropTracking.API
 
         public List<DailyInformation> DailyInformation { get; set; }
 
-        // TODO 2: Duplicate the DailyInformation property above and call it DailyHistory
+        public List<DailyInformation> DailyHistory { get; set; }
+
+        
 
         public CropDataStore()
         {
@@ -21,7 +23,9 @@ namespace CropTracking.API
             {
                 var json = r.ReadToEnd();
                 DailyInformation = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
-                // TODO 3: Duplicate the previous line and assign the results to the DailyHistory property instead.
+
+                DailyHistory = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
+
             }
         }
     }
