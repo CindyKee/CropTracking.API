@@ -22,20 +22,15 @@ namespace CropTracking.API.Controllers
         [HttpGet("{packShipDate:datetime?}")]
         public IActionResult GetDailyInfo(DateTime? packShipDate, [FromQuery]string companyName)
         {
-            // TODO 1: Create new Solution Folder in Solution Explorer called 'Helpers'
-            // TODO 2: Create new class in that folder called DateHelpers
-            // TODO 3: Copy code from original DateHelpers class into this new one. 
-            //  See https://cncconsulting.visualstudio.com/DataDesigners/DataDesigners%20Team/_versionControl?path=%24%2FDataDesigners%2FBMRIC%2FBMRIC2.0%2FBMRIC2.0%2FHelpers%2FDateHelpers.cs
-            // TODO 4: If packShipDate is null, set it to Yesterday using DateHelpers class
-            //  HINT: To check if a nullable DateTime is null, use packShipDate.HasValue
-            //  See Line 93 in https://cncconsulting.visualstudio.com/DataDesigners/DataDesigners%20Team/_versionControl?path=%24%2FDataDesigners%2FBMRIC%2FBMRIC2.0%2FBMRIC2.0%2FControllers%2FSubmissionsController.cs
-            //      for how to call the DateHelpers class method to get Yesterday.
+            if (packShipDate.HasValue == false)
+            {
+                packShipDate = CropTracking.API.Helpers.DateHelpers.GetYesterday(DateTime.Today);
+            }
 
-
-            // TODO 5: Check to see if company exists in request; If not, return Not Found.
-            //  HINT: Use string.IsNullOrWhitespace(companyName) to see if it has a value.
-
-
+            if (string.IsNullOrWhiteSpace(companyName))
+            {
+                return NotFound();
+            }
 
             // Get data for requested date for this Company (if company provided)
             // TODO: After EF is added: use AutoMapper to convert this to a DTO.
@@ -53,11 +48,19 @@ namespace CropTracking.API.Controllers
             return Ok(dailyInfo);
         }
 
-        // TODO 6: Write a new method called GetById that is another HttpGet method. 
-        //  It will have one parameter - an integer called 'id'.
-        //  You will use a statement similar to the FirstOrDefault statement in the previous method, except this
-        //  time you will use SingleOrDefault and you will compare the DailyInformationId to the id parameter.
-        //  Return Not Found if you don't get anything back. Otherwise, return Ok and include the data.
+        [HttpGet("{id:int}")]
+        public IActionResult GetById(int id)
+        {
+            var record = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
+
+            if (record == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(record);
+
+        }
 
         // TODO: Later: Write a new method called Update that is an HttpPut method...
         //  This method will receive a DailyInfoDto object and update it in the database.
