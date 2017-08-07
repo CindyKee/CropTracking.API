@@ -28,7 +28,8 @@ namespace CropTracking.API.Controllers
             //  See https://cncconsulting.visualstudio.com/DataDesigners/DataDesigners%20Team/_versionControl?path=%24%2FDataDesigners%2FBMRIC%2FBMRIC2.0%2FBMRIC2.0%2FHelpers%2FDateHelpers.cs
             // TODO 4: If packShipDate is null, set it to Yesterday using DateHelpers class
             //  HINT: To check if a nullable DateTime is null, use packShipDate.HasValue
-            
+            //  See Line 93 in https://cncconsulting.visualstudio.com/DataDesigners/DataDesigners%20Team/_versionControl?path=%24%2FDataDesigners%2FBMRIC%2FBMRIC2.0%2FBMRIC2.0%2FControllers%2FSubmissionsController.cs
+            //      for how to call the DateHelpers class method to get Yesterday.
 
 
             // TODO 5: Check to see if company exists in request; If not, return Not Found.
