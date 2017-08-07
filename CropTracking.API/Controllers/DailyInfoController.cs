@@ -24,6 +24,7 @@ namespace CropTracking.API.Controllers
         {
             if (packShipDate.HasValue == false)
             {
+                // TODO 1: Remove the CropTracking.API. that is gray here and add a using statement at the top.
                 packShipDate = CropTracking.API.Helpers.DateHelpers.GetYesterday(DateTime.Today);
             }
 
