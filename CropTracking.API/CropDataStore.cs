@@ -9,7 +9,7 @@ namespace CropTracking.API
     {
         public static CropDataStore Current { get; } = new CropDataStore();
 
-        public List<DailyInfoDto> Submissions { get; set; }
+        public List<DailyInformation> DailyInformation { get; set; }
 
         public CropDataStore()
         {
@@ -18,7 +18,7 @@ namespace CropTracking.API
             using (var r = File.OpenText("DailyInformation.json"))
             {
                 var json = r.ReadToEnd();
-                Submissions = JsonConvert.DeserializeObject<List<DailyInfoDto>>(json);
+                DailyInformation = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
             }
         }
     }
