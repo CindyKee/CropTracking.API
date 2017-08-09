@@ -65,6 +65,9 @@ namespace CropTracking.API.Controllers
 
         }
 
+        // TODO: Later: Write a new method called Create that is an HttpPost method...
+        //  This method will receive a DailyInfoDto object and insert it into the database.
+
         // TODO: Later: Write a new method called Update that is an HttpPut method...
         //  This method will receive a DailyInfoDto object and update it in the database.
     }
