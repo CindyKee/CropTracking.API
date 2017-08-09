@@ -1,10 +1,11 @@
-﻿namespace CropTracking.API.Controllers
-{ 
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using CropTracking.API.Helpers;
+
+namespace CropTracking.API.Controllers
+{ 
+
 
 
     [Route("api/[controller]")]
@@ -24,7 +25,7 @@ using CropTracking.API.Helpers;
             if (packShipDate.HasValue == false)
             {
 
-                packShipDate = Helpers.DateHelpers.GetYesterday(DateTime.Today);
+                packShipDate = DateHelpers.GetYesterday(DateTime.Today);
             }
 
             if (string.IsNullOrWhiteSpace(companyName))

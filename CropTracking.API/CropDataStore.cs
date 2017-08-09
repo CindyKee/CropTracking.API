@@ -13,7 +13,8 @@ namespace CropTracking.API
 
         public List<DailyInformation> DailyHistory { get; set; }
 
-        
+        public List<DailyInformation> DailyInformationFeeds { get; set; }
+
 
         public CropDataStore()
         {
@@ -26,6 +27,7 @@ namespace CropTracking.API
 
                 DailyHistory = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
 
+                DailyInformationFeeds = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
             }
         }
     }
