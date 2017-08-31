@@ -51,7 +51,7 @@ namespace CropTracking.API.Controllers
             return Ok(dailyInfo);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetById")]
         public IActionResult GetById(int id)
         {
             var record = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
@@ -64,6 +64,37 @@ namespace CropTracking.API.Controllers
             return Ok(record);
 
         }
+
+        [HttpPost()]
+        public IActionResult Create([FromBody] Models.DailyInfoDto dailyInfo)
+        {
+            if (dailyInfo == null)
+            {
+                return BadRequest();
+            }
+
+
+            var maxDailyInfoId = CropDataStore.Current.DailyInformation.Max(p => p.DailyInformationId);
+
+            var dinfo = new Models.DailyInformation()
+            {
+                DailyInformationId = ++maxDailyInfoId,
+                PackShipDate = dailyInfo.PackShipDate,
+                ReportDate = dailyInfo.ReportDate,
+                Conventional44ozInventory = dailyInfo.Conventional44ozInventory,
+                Organic60ozShipped = dailyInfo.Organic60ozShipped,
+                Organic60ozPrice = dailyInfo.Organic60ozPrice
+                
+            };
+
+            CropDataStore.Current.DailyInformation.Add(dinfo);
+
+            return CreatedAtRoute("GetById", new
+            { id = dinfo.DailyInformationId }, dinfo);
+
+        }
+
+
 
         // TODO: Now: Write a new method called Create that is an HttpPost method...
         //  This method will receive a DailyInfoDto object and insert it into the database.
@@ -95,7 +126,7 @@ namespace CropTracking.API.Controllers
         //      - Build and fix any errors.
 
         // TODO 2: Use Postman to create a Post request. Follow what the instructor does in the video to see how to create this
-        //  type of request. Your URL will be more like: http://localhost:54022/DailyInfo . Make sure you change the type of request
+        //  type of request. Your URL will be more like: http://localhost:54022/api/DailyInfo . Make sure you change the type of request
         //  to POST - the default is GET.
         //  
         //  - For the request body, you will use something like:
