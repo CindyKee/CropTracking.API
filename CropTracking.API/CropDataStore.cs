@@ -30,5 +30,16 @@ namespace CropTracking.API
                 DailyInformationFeeds = JsonConvert.DeserializeObject<List<DailyInformation>>(json);
             }
         }
+
+        /// <summary>
+        /// Rewrite the JSON file back out with any changes that we have made so far.
+        /// </summary>
+        public void Save()
+        {
+            var json = JsonConvert.SerializeObject(DailyInformation, Formatting.Indented);
+
+            // write string to file
+            File.WriteAllText("DailyInformation.json", json);
+        }
     }
 }
