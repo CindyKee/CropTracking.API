@@ -115,15 +115,47 @@ namespace CropTracking.API.Controllers
         //  with Pluralsight clip "Demo: Updating a Resource" and see how far you can get in 
         //  writing this Update method. 
         //      - You will be receiving a DailyInfoDto and Id for an object that already exists 
-        //          in the CropDataStore and then updating field(s) in it. 
+        //          in the CropDataStore and then updating field(s) in it. Don't forget to Save it!
         //      - The Route string in the HttpPut will be the same as route for GetById, 
         //          but without the Name property.
-        
+
         // TODO 4: Using Postman, test the new Update (PUT) method. Try 2 kinds of tests:
         //      1 - A successful test, meaning that the Id sent must be one that exists
         //          in our Json file.
         //      2 - A Not Found test, where you send a PUT request with an Id that doesn't
         //          exist in the file yet.
-        
+
+        // TODO 5: Begin watching the next clip, "Demo: Partially Updating a Resource.
+        //  - Try to write a PartialUpdate method like he is doing in this clip. 
+        //  - The Route string in the HttpPut will be the same as route for GetById, 
+        //      but without the Name property.
+        //  - Use the DailyInfoPto in place of the "ForUpdate" Dto he uses in the video.
+        //      We don't use separate DTOs for Create and Update like he does. In a larger system,
+        //      that might make sense, but this is really a small application.
+        //  - See how far you can get with this. Don't forget to Save it! I have never written 
+        //      a Partial Update (PATCH) method before, so if you get this to work, you're awesome! :)
+
+        // TODO 6: Using Postman, try several different kinds of updates like he does in his video.
+        //          Add a check for ModelState validation like he does (if you get this far.)
+
+        // TODO 7: Regardless if you were successful with a PATCH Partial Update, finish watching 
+        //  the video clip.
+
+        // TODO 8: Write a new method called Delete that is an HttpDelete method. Follow along
+        //  with Pluralsight clip "Demo: Deleting a Resource" and see how far you can get in 
+        //  writing this Update method. 
+        //      - You will be receiving an Id for an object that already exists 
+        //          in the CropDataStore and then deleting it. 
+        //          -- Don't forget to Save it, but realize when you do, it will truly be deleted. :)
+        //      - The Route string in the HttpDelete will be the same as route for GetById, 
+        //          but without the Name property.
+
+        // TODO 9: Using Postman, test the new Delete (DELETE) method. Try 2 kinds of tests:
+        //      1 - A successful test, meaning that the Id sent must be one that exists
+        //          in our Json file.
+        //      2 - A Not Found test, where you send a DELETE request with an Id that doesn't
+        //          exist in the file yet.
+
+
     }
 }
