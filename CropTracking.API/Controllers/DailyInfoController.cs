@@ -2,7 +2,8 @@
 using System;
 using System.Linq;
 using CropTracking.API.Helpers;
-
+using Microsoft.AspNetCore.JsonPatch;
+using CropTracking.API.Models;
 
 namespace CropTracking.API.Controllers
 {
@@ -51,7 +52,7 @@ namespace CropTracking.API.Controllers
             return Ok(dailyInfo);
         }
 
-        [HttpGet("{id:int}", Name = "GetById")]
+        [HttpGet("{id:int}", Name = "GetByIds")]
         public IActionResult GetById(int id)
         {
             var record = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
@@ -86,6 +87,11 @@ namespace CropTracking.API.Controllers
                 return BadRequest();
             }
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
 
             var maxDailyInfoId = CropDataStore.Current.DailyInformation.Max(p => p.DailyInformationId);
 
@@ -102,6 +108,8 @@ namespace CropTracking.API.Controllers
 
             CropDataStore.Current.DailyInformation.Add(dinfo);
 
+
+            CropDataStore.Current.Save();
             // TODO 2 - Call Save here to rewrite the file with all of the current data.
             //      Save is a method on the Current property of the CropDataStore. See if 
             //      you can figure out how to call that. It does not return anything.
@@ -111,19 +119,102 @@ namespace CropTracking.API.Controllers
         }
 
 
-        // TODO 3: Write a new method called Update that is an HttpPut method. Follow along
-        //  with Pluralsight clip "Demo: Updating a Resource" and see how far you can get in 
-        //  writing this Update method. 
-        //      - You will be receiving a DailyInfoDto and Id for an object that already exists 
-        //          in the CropDataStore and then updating field(s) in it. Don't forget to Save it!
-        //      - The Route string in the HttpPut will be the same as route for GetById, 
-        //          but without the Name property.
+        [HttpPut("{id:int}")]
+        public IActionResult Update(int id, [FromBody] Models.DailyInfoDto dailyInfo)
+        {
+            if (dailyInfo == null)
+            {
+                return BadRequest();
+            }
 
-        // TODO 4: Using Postman, test the new Update (PUT) method. Try 2 kinds of tests:
-        //      1 - A successful test, meaning that the Id sent must be one that exists
-        //          in our Json file.
-        //      2 - A Not Found test, where you send a PUT request with an Id that doesn't
-        //          exist in the file yet.
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var record = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
+
+            if (record == null)
+            {
+                return NotFound();
+            }
+
+            record.PackShipDate = dailyInfo.PackShipDate;
+            record.DailyInformationId = dailyInfo.DailyInformationId;
+            record.ReportDate = dailyInfo.ReportDate;
+            record.Conventional44ozInventory = dailyInfo.Conventional44ozInventory;
+            record.Organic60ozShipped = dailyInfo.Organic60ozShipped;
+            record.Organic60ozPrice = dailyInfo.Organic60ozPrice;
+            
+            CropDataStore.Current.Save();
+
+            return NoContent();
+        }
+        
+        [HttpPatch("{id:int}")]
+
+        public IActionResult PartialUpdate(int id,
+            [FromBody] JsonPatchDocument<DailyInfoDto> patchDoc)
+        {
+            if (patchDoc == null)
+            {
+                return BadRequest();
+            }
+
+            var idiots = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
+            if (idiots == null)
+            {
+                return NotFound();
+            }
+
+            var dailyInfoToPatch =
+                    new DailyInfoDto()
+                    {
+                        PackShipDate = idiots.PackShipDate,
+                        DailyInformationId = idiots.DailyInformationId,
+                        ReportDate = idiots.ReportDate,
+                        Conventional44ozInventory = idiots.Conventional44ozInventory,
+                        Organic60ozShipped = idiots.Organic60ozShipped,
+                        Organic60ozPrice = idiots.Organic60ozPrice
+                    };
+            patchDoc.ApplyTo(dailyInfoToPatch, ModelState);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            idiots.PackShipDate = dailyInfoToPatch.PackShipDate;
+            idiots.DailyInformationId = dailyInfoToPatch.DailyInformationId;
+            idiots.ReportDate = dailyInfoToPatch.ReportDate;
+            idiots.Conventional44ozInventory = dailyInfoToPatch.Conventional44ozInventory;
+            idiots.Organic60ozShipped = dailyInfoToPatch.Organic60ozShipped;
+            idiots.Organic60ozPrice = dailyInfoToPatch.Organic60ozPrice;
+
+
+            CropDataStore.Current.Save();
+
+            return NoContent();
+
+        }
+
+       [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            var record = CropDataStore.Current.DailyInformation.FirstOrDefault(whatever => whatever.DailyInformationId == id);
+
+            if (record == null)
+            {
+                return NotFound();
+            }
+
+            CropDataStore.Current.DailyInformation.Remove(record);
+
+            CropDataStore.Current.Save();
+
+            return NoContent();
+
+
+        }
 
         // TODO 5: Begin watching the next clip, "Demo: Partially Updating a Resource.
         //  - Try to write a PartialUpdate method like he is doing in this clip. 

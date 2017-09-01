@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace CropTracking.API.Models
 {
     public class DailyInfoDto
@@ -12,6 +13,8 @@ namespace CropTracking.API.Models
             PackShipDate = (today.DayOfWeek == DayOfWeek.Monday)
                 ? today.AddDays(-3)
                 : today.AddDays(-1);
+
+
         }
 
         public override string ToString()
@@ -28,6 +31,7 @@ namespace CropTracking.API.Models
         // Set when the No Activity button is clicked instead of the Send button.
         public bool NoActivity { get; set; }
 
+        [Required(ErrorMessage ="Pack Ship Date Required!")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Pack/Ship Date:")]
         public DateTime PackShipDate { get; set; }
