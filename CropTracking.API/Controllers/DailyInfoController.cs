@@ -4,16 +4,51 @@ using System.Linq;
 using CropTracking.API.Helpers;
 using Microsoft.AspNetCore.JsonPatch;
 using CropTracking.API.Models;
+using Microsoft.Extensions.Logging;
+using CropTracking.API.Services;
 
 namespace CropTracking.API.Controllers
 {
     [Route("api/[controller]")]
     public class DailyInfoController : Controller
     {
-        [HttpGet()]
-        public IActionResult GetDailyInfo()
+        private ILogger<DailyInfoController> _logger;
+        private IMailService _mailService;
+
+
+        public DailyInfoController(ILogger<DailyInfoController> logger,
+            IMailService mailService)
         {
-            return Ok(CropDataStore.Current.DailyInformation);
+            _logger = logger;
+            _mailService = mailService;
+        }
+
+        [HttpGet()]
+        public IActionResult GetDailyInfo(int infoId)
+        {
+
+            try
+            {
+                throw new Exception("Exception sample");
+
+
+                var info = CropDataStore.Current.DailyInformation.FirstOrDefault(p => p.DailyInformationId == infoId);
+
+                if (info == null)
+                {
+                    _logger.LogInformation($"Info with id {infoId} wasn't found.");
+                    return NotFound();
+                }
+
+                return Ok(CropDataStore.Current.DailyInformation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting info with id {infoId}.", ex);
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
+        
+
         }
 
         /// <summary>
@@ -53,16 +88,30 @@ namespace CropTracking.API.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetByIds")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(int infoId)
         {
-            var record = CropDataStore.Current.DailyInformation.SingleOrDefault(whatever => whatever.DailyInformationId == id);
 
-            if (record == null)
+            try
             {
-                return NotFound();
+                throw new Exception("Exception sample");
+
+
+                var info = CropDataStore.Current.DailyInformation.FirstOrDefault(p => p.DailyInformationId == infoId);
+
+                if (info == null)
+                {
+                    _logger.LogInformation($"Info with id {infoId} wasn't found.");
+                    return NotFound();
+                }
+
+                return Ok(CropDataStore.Current.DailyInformation);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting info with id {infoId}.", ex);
+                return StatusCode(500, "A problem happened while handling your request.");
             }
 
-            return Ok(record);
 
         }
 
@@ -206,6 +255,9 @@ namespace CropTracking.API.Controllers
             {
                 return NotFound();
             }
+
+            _mailService.Send("Daily Info deleted.",
+                    $"Daily Info with id {record.DailyInformationId} was deleted.");
 
             CropDataStore.Current.DailyInformation.Remove(record);
 
